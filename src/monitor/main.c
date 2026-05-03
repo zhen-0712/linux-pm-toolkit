@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
     output_format_t fmt = OUTPUT_TEXT;
     int max_samples = 0;
 
-    /* TODO: replace with proper getopt in feature/userspace-cpufreq */
     for (int i = 1; i < argc; i++) {
         if ((strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--interval") == 0) && i + 1 < argc)
             interval_sec = atoi(argv[++i]);
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
 
     signal(SIGINT, handle_sigint);
 
-    int num_cpus    = sysfs_count_cpus();
+    int num_cpus     = sysfs_count_cpus();
     int num_thermals = sysfs_count_thermal_zones();
 
     if (num_cpus <= 0) {
@@ -59,9 +58,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    cpufreq_info_t  *freqs    = calloc(num_cpus,     sizeof(*freqs));
-    cpuidle_info_t  *idles    = calloc(num_cpus,     sizeof(*idles));
-    thermal_zone_t  *thermals = calloc(num_thermals, sizeof(*thermals));
+    cpufreq_info_t *freqs    = calloc(num_cpus,                   sizeof(*freqs));
+    cpuidle_info_t *idles    = calloc(num_cpus,                   sizeof(*idles));
+    thermal_zone_t *thermals = calloc(num_thermals > 0 ? num_thermals : 1,
+                                      sizeof(*thermals));
 
     if (!freqs || !idles || !thermals) {
         fprintf(stderr, "Error: allocation failed\n");
@@ -70,14 +70,31 @@ int main(int argc, char *argv[])
 
     int sample = 0;
     while (running && (max_samples == 0 || sample < max_samples)) {
+        /* only count CPUs that actually have cpufreq/cpuidle support */
+        int valid_freqs = 0;
+        int valid_idles = 0;
+
         for (int c = 0; c < num_cpus; c++) {
-            cpufreq_read(sysfs_read_file, c, &freqs[c]);
-            cpuidle_read(sysfs_read_file, c, &idles[c]);
+            if (cpufreq_read(sysfs_read_file, c, &freqs[valid_freqs]) == 0)
+                valid_freqs++;
+            if (cpuidle_read(sysfs_read_file, c, &idles[valid_idles]) == 0)
+                valid_idles++;
         }
         for (int z = 0; z < num_thermals; z++)
             thermal_read(sysfs_read_file, z, &thermals[z]);
 
-        output_snapshot(fmt, freqs, num_cpus, idles, num_cpus, thermals, num_thermals);
+        if (valid_freqs == 0 && valid_idles == 0 && num_thermals == 0) {
+            fprintf(stderr,
+                "Warning: no cpufreq/cpuidle/thermal data available on this system.\n"
+                "  On WSL2, Hyper-V does not expose standard Linux PM sysfs interfaces.\n"
+                "  Run on bare-metal Linux or a KVM/QEMU VM for real data.\n");
+            break;
+        }
+
+        output_snapshot(fmt,
+                        freqs, valid_freqs,
+                        idles, valid_idles,
+                        thermals, num_thermals);
         fflush(stdout);
 
         sample++;
