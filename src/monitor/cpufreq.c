@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200809L  /* strtok_r */
+
 #include "cpufreq.h"
 #include "sysfs_utils.h"
 
