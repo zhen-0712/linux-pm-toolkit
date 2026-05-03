@@ -16,13 +16,13 @@ TESTS = test_cpufreq test_thermal test_cpuidle
 all: $(TESTS)
 
 test_cpufreq: test_cpufreq.c $(MONITOR_SRCS)
-	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"tests/unit/mock_sysfs\" -o $@ $^
+	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"mock_sysfs\" -o $@ $^
 
 test_thermal: test_thermal.c $(MONITOR_SRCS)
-	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"tests/unit/mock_sysfs\" -o $@ $^
+	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"mock_sysfs\" -o $@ $^
 
 test_cpuidle: test_cpuidle.c $(MONITOR_SRCS)
-	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"tests/unit/mock_sysfs\" -o $@ $^
+	$(CC) $(CFLAGS) -DMOCK_SYSFS_ROOT=\"mock_sysfs\" -o $@ $^
 
 run_tests: all
 	@echo "--- test_cpufreq ---" && ./test_cpufreq

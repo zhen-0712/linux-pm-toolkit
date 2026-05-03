@@ -9,9 +9,8 @@ kernel:
 	$(MAKE) -C src/kernel
 
 test: monitor
-	$(MAKE) -C tests/unit
-	@echo "--- Running unit tests ---"
-	./tests/unit/run_tests
+	@echo "--- Running C unit tests ---"
+	$(MAKE) -C tests/unit run_tests
 	@echo "--- Running integration tests ---"
 	bash tests/integration/test_full_read.sh
 
