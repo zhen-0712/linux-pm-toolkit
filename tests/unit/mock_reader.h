@@ -6,9 +6,10 @@
  *
  * Redirects all sysfs path reads to a local mock_sysfs/ directory tree.
  * e.g. /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
- *  →   tests/unit/mock_sysfs/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+ *  →   mock_sysfs/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
  *
- * Set MOCK_SYSFS_ROOT before including this header, or define it at compile time.
+ * Path is relative to tests/unit/ because test binaries run from that directory
+ * (make -C tests/unit changes CWD to tests/unit/ before executing binaries).
  */
 
 #include "../../src/monitor/sysfs_utils.h"
@@ -17,7 +18,7 @@
 #include <string.h>
 
 #ifndef MOCK_SYSFS_ROOT
-#define MOCK_SYSFS_ROOT "tests/unit/mock_sysfs"
+#define MOCK_SYSFS_ROOT "mock_sysfs"
 #endif
 
 static int mock_sysfs_read(const char *path, char *buf, size_t len)
