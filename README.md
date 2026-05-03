@@ -1,5 +1,7 @@
 # linux-pm-toolkit
 
+![CI](https://github.com/zhen-0712/linux-pm-toolkit/actions/workflows/ci.yml/badge.svg)
+
 A Linux CPU power management monitoring toolkit demonstrating hands-on work with sysfs, cpufreq, cpuidle, and thermal subsystems — from userspace tooling down to a kernel module.
 
 ## Architecture
