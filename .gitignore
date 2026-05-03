@@ -27,7 +27,6 @@ build/
 venv/
 
 # Test output
-tests/unit/mock_sysfs/
 *.log
 *.csv
 *.json.out
