@@ -1,0 +1,44 @@
+# C build artifacts
+*.o
+*.a
+*.so
+src/monitor/pm_monitor
+
+# Kernel module artifacts
+*.ko
+*.mod
+*.mod.c
+*.mod.o
+*.symvers
+modules.order
+Module.symvers
+.tmp_versions/
+.cache.mk
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Test output
+tests/unit/mock_sysfs/
+*.log
+*.csv
+*.json.out
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
