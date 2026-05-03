@@ -16,9 +16,9 @@ int sysfs_read_file(const char *path, char *buf, size_t len)
     fclose(f);
     buf[n] = '\0';
 
-    /* strip trailing newline that sysfs always appends */
-    if (n > 0 && buf[n - 1] == '\n')
-        buf[n - 1] = '\0';
+    /* strip trailing \n and \r (handles both LF and CRLF) */
+    if (n > 0 && buf[n - 1] == '\n') buf[--n] = '\0';
+    if (n > 0 && buf[n - 1] == '\r') buf[--n] = '\0';
 
     return 0;
 }
