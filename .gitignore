@@ -3,6 +3,9 @@
 *.a
 *.so
 src/monitor/pm_monitor
+tests/unit/test_cpufreq
+tests/unit/test_thermal
+tests/unit/test_cpuidle
 
 # Kernel module artifacts
 *.ko
