@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 
     int num_cpus, num_thermals;
     if (demo) {
-        num_cpus     = 1;
-        num_thermals = 1;
+        num_cpus     = 4;
+        num_thermals = 3;
         fprintf(stderr, "pm_monitor: demo mode — using mock sysfs fixture data\n");
     } else {
         num_cpus     = sysfs_count_cpus();
