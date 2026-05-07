@@ -7,8 +7,9 @@ static void test_cpuidle_state_name(void)
     cpuidle_info_t info = {0};
     int rc = cpuidle_read(mock_sysfs_read, 0, &info);
     ASSERT_EQ_INT(rc, 0);
-    ASSERT_EQ_INT(info.num_states, 1);
+    ASSERT_EQ_INT(info.num_states, 2);
     ASSERT_STR_EQ(info.states[0].name, "C1");
+    ASSERT_STR_EQ(info.states[1].name, "C6");
 }
 
 static void test_cpuidle_usage(void)
